@@ -3,6 +3,8 @@
 namespace Gloudemans\Shoppingcart;
 
 use Closure;
+use DateTime;
+use Illuminate\Database\Connection;
 use Illuminate\Support\Collection;
 use Illuminate\Session\SessionManager;
 use Illuminate\Database\DatabaseManager;
@@ -19,14 +21,14 @@ class Cart
     /**
      * Instance of the session manager.
      *
-     * @var \Illuminate\Session\SessionManager
+     * @var SessionManager
      */
     protected $session;
 
     /**
      * Instance of the event dispatcher.
      *
-     * @var \Illuminate\Contracts\Events\Dispatcher
+     * @var Dispatcher
      */
     private $events;
 
@@ -40,8 +42,8 @@ class Cart
     /**
      * Cart constructor.
      *
-     * @param \Illuminate\Session\SessionManager      $session
-     * @param \Illuminate\Contracts\Events\Dispatcher $events
+     * @param SessionManager $session
+     * @param Dispatcher $events
      */
     public function __construct(SessionManager $session, Dispatcher $events)
     {
@@ -55,7 +57,7 @@ class Cart
      * Set the current cart instance.
      *
      * @param string|null $instance
-     * @return \Gloudemans\Shoppingcart\Cart
+     * @return Cart
      */
     public function instance($instance = null)
     {
@@ -84,7 +86,7 @@ class Cart
      * @param int|float $qty
      * @param float     $price
      * @param array     $options
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return array|CartItem
      */
     public function add($id, $name = null, $qty = null, $price = null, array $options = [])
     {
@@ -120,7 +122,7 @@ class Cart
      *
      * @param string $rowId
      * @param mixed  $qty
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return CartItem
      */
     public function update($rowId, $qty)
     {
@@ -182,7 +184,7 @@ class Cart
      * Get a cart item from the cart by its rowId.
      *
      * @param string $rowId
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return CartItem
      */
     public function get($rowId)
     {
@@ -207,7 +209,7 @@ class Cart
     /**
      * Get the content of the cart.
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function content()
     {
@@ -290,8 +292,8 @@ class Cart
     /**
      * Search the cart content for a cart item matching the given search closure.
      *
-     * @param \Closure $search
-     * @return \Illuminate\Support\Collection
+     * @param Closure $search
+     * @return Collection
      */
     public function search(Closure $search)
     {
@@ -349,6 +351,7 @@ class Cart
      *
      * @param mixed $identifier
      * @return void
+     * @throws \Exception
      */
     public function store($identifier)
     {
@@ -365,7 +368,7 @@ class Cart
             'identifier' => $identifier,
             'instance' => $this->currentInstance(),
             'content' => serialize($content),
-            'created_at'=> new \DateTime()
+            'created_at'=> new DateTime()
         ]);
 
         $this->events->dispatch('cart.stored');
@@ -448,7 +451,7 @@ class Cart
     /**
      * Get the carts content, if there is no cart content set yet, return a new empty Collection
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     protected function getContent()
     {
@@ -467,7 +470,7 @@ class Cart
      * @param int|float $qty
      * @param float     $price
      * @param array     $options
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return CartItem
      */
     private function createCartItem($id, $name, $qty, $price, array $options)
     {
@@ -513,7 +516,7 @@ class Cart
     /**
      * Get the database connection.
      *
-     * @return \Illuminate\Database\Connection
+     * @return Connection
      */
     protected function getConnection()
     {
@@ -545,7 +548,7 @@ class Cart
     }
 
     /**
-     * Get the Formated number
+     * Get the Formatted number
      *
      * @param $value
      * @param $decimals

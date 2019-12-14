@@ -5,6 +5,8 @@ namespace Gloudemans\Shoppingcart;
 use Illuminate\Contracts\Support\Arrayable;
 use Gloudemans\Shoppingcart\Contracts\Buyable;
 use Illuminate\Contracts\Support\Jsonable;
+use Illuminate\Support\Arr;
+use InvalidArgumentException;
 
 class CartItem implements Arrayable, Jsonable
 {
@@ -82,13 +84,13 @@ class CartItem implements Arrayable, Jsonable
     public function __construct($id, $name, $price, array $options = [])
     {
         if(empty($id)) {
-            throw new \InvalidArgumentException('Please supply a valid identifier.');
+            throw new InvalidArgumentException('Please supply a valid identifier.');
         }
         if(empty($name)) {
-            throw new \InvalidArgumentException('Please supply a valid name.');
+            throw new InvalidArgumentException('Please supply a valid name.');
         }
         if(strlen($price) < 0 || ! is_numeric($price)) {
-            throw new \InvalidArgumentException('Please supply a valid price.');
+            throw new InvalidArgumentException('Please supply a valid price.');
         }
 
         $this->id       = $id;
@@ -186,7 +188,7 @@ class CartItem implements Arrayable, Jsonable
     public function setQuantity($qty)
     {
         if(empty($qty) || ! is_numeric($qty))
-            throw new \InvalidArgumentException('Please supply a valid quantity.');
+            throw new InvalidArgumentException('Please supply a valid quantity.');
 
         $this->qty = $qty;
     }
@@ -194,7 +196,7 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Update the cart item from a Buyable.
      *
-     * @param \Gloudemans\Shoppingcart\Contracts\Buyable $item
+     * @param Buyable $item
      * @return void
      */
     public function updateFromBuyable(Buyable $item)
@@ -213,12 +215,12 @@ class CartItem implements Arrayable, Jsonable
      */
     public function updateFromArray(array $attributes)
     {
-        $this->id       = array_get($attributes, 'id', $this->id);
-        $this->qty      = array_get($attributes, 'qty', $this->qty);
-        $this->name     = array_get($attributes, 'name', $this->name);
-        $this->price    = array_get($attributes, 'price', $this->price);
+        $this->id       = Arr::get($attributes, 'id', $this->id);
+        $this->qty      = Arr::get($attributes, 'qty', $this->qty);
+        $this->name     = Arr::get($attributes, 'name', $this->name);
+        $this->price    = Arr::get($attributes, 'price', $this->price);
         $this->priceTax = $this->price + $this->tax;
-        $this->options  = new CartItemOptions(array_get($attributes, 'options', $this->options));
+        $this->options  = new CartItemOptions(Arr::get($attributes, 'options', $this->options));
 
         $this->rowId = $this->generateRowId($this->id, $this->options->all());
     }
@@ -227,7 +229,7 @@ class CartItem implements Arrayable, Jsonable
      * Associate the cart item with the given model.
      *
      * @param mixed $model
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return CartItem
      */
     public function associate($model)
     {
@@ -240,7 +242,7 @@ class CartItem implements Arrayable, Jsonable
      * Set the tax rate.
      *
      * @param int|float $taxRate
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return CartItem
      */
     public function setTaxRate($taxRate)
     {
@@ -253,7 +255,7 @@ class CartItem implements Arrayable, Jsonable
      * Set saved state.
      *
      * @param bool $bool
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return CartItem
      */
     public function setSaved($bool)
     {
@@ -304,9 +306,9 @@ class CartItem implements Arrayable, Jsonable
     /**
      * Create a new instance from a Buyable.
      *
-     * @param \Gloudemans\Shoppingcart\Contracts\Buyable $item
+     * @param Buyable $item
      * @param array                                      $options
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return CartItem
      */
     public static function fromBuyable(Buyable $item, array $options = [])
     {
@@ -317,11 +319,11 @@ class CartItem implements Arrayable, Jsonable
      * Create a new instance from the given array.
      *
      * @param array $attributes
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return CartItem
      */
     public static function fromArray(array $attributes)
     {
-        $options = array_get($attributes, 'options', []);
+        $options = Arr::get($attributes, 'options', []);
 
         return new self($attributes['id'], $attributes['name'], $attributes['price'], $options);
     }
@@ -333,7 +335,7 @@ class CartItem implements Arrayable, Jsonable
      * @param string     $name
      * @param float      $price
      * @param array      $options
-     * @return \Gloudemans\Shoppingcart\CartItem
+     * @return CartItem
      */
     public static function fromAttributes($id, $name, $price, array $options = [])
     {
