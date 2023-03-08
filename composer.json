@@ -1,12 +1,12 @@
 {
-    "name": "hardevine/shoppingcart",
+    "name": "clearly-mine/shoppingcart",
     "description": "Laravel Shoppingcart",
     "keywords": ["laravel", "shoppingcart"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Rob Gloudemans",
-            "email": "info@robgloudemans.nl"
+            "name": "Clearum Poshnum",
+            "email": "inquisitively@pm.me"
         }
     ],
     "require": {
