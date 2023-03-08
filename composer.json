@@ -1,12 +1,12 @@
 {
-    "name": "clearly-mine/shoppingcart",
+    "name": "hardevine/shoppingcart",
     "description": "Laravel Shoppingcart",
     "keywords": ["laravel", "shoppingcart"],
     "license": "MIT",
     "authors": [
         {
-            "name": "Clearum Poshnum",
-            "email": "inquisitively@pm.me"
+            "name": "Rob Gloudemans",
+            "email": "info@robgloudemans.nl"
         }
     ],
     "require": {
@@ -41,11 +41,6 @@
             "aliases": {
                 "Cart": "Gloudemans\\Shoppingcart\\Facades\\Cart"
             }
-        }
-    },
-    "config": {
-        "allow-plugins": {
-            "kylekatarnls/update-helper": true
         }
     }
 }
