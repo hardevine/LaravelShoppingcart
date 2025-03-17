@@ -256,7 +256,7 @@ class Cart
      * @param int    $decimals
      * @param string $decimalPoint
      * @param string $thousandSeperator
-     * @return float
+     * @return string
      */
     public function tax($decimals = null, $decimalPoint = null, $thousandSeperator = null)
     {
@@ -275,7 +275,7 @@ class Cart
      * @param int    $decimals
      * @param string $decimalPoint
      * @param string $thousandSeperator
-     * @return float
+     * @return string
      */
     public function subtotal($decimals = null, $decimalPoint = null, $thousandSeperator = null)
     {
